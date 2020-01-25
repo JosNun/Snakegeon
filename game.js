@@ -1,4 +1,4 @@
-import world from "./world";
+import World from "./world";
 
 const canvas = document.getElementById("game");
 
@@ -15,7 +15,7 @@ const ctx = canvas.getContext("2d");
 let x = 0;
 let y = 0;
 
-const w = new world(ctx);
+const w = new World(ctx);
 
 function update() {
   ctx.clearRect(0, 0, size, size);

@@ -1,9 +1,9 @@
-import player from "./player";
+import Player from "./player";
 
-class world {
+class World {
   constructor(ctx) {
     this.ctx = ctx;
-    this.player = new player(ctx, 10, 10, 5);
+    this.player = new Player(ctx, 10, 10, 5);
   }
 
   update() {
@@ -11,4 +11,4 @@ class world {
   }
 }
 
-export default world;
+export default World;

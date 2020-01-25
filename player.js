@@ -1,4 +1,4 @@
-class player {
+class Player {
   constructor(ctx, x, y, l) {
     this.ctx = ctx;
     this.x = x;
@@ -18,4 +18,4 @@ class player {
   }
 }
 
-export default player;
+export default Player;
