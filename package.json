@@ -1,0 +1,23 @@
+{
+  "name": "snakegeon",
+  "version": "1.0.0",
+  "description": "",
+  "main": "game.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "parcel index.html"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/josnun/snakegeon.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/josnun/snakegeon/issues"
+  },
+  "homepage": "https://github.com/josnun/snakegeon#readme",
+  "devDependencies": {
+    "parcel-bundler": "^1.12.4"
+  }
+}

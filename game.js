@@ -1,4 +1,7 @@
-const canvas = document.getElementById("game");
+import './world';
+import './player';
+
+const canvas = document.getElementById('game');
 
 const size =
   window.innerWidth < window.innerHeight
@@ -8,7 +11,7 @@ const size =
 canvas.width = size;
 canvas.height = size;
 
-const ctx = canvas.getContext("2d");
+const ctx = canvas.getContext('2d');
 
 let x = 0;
 let y = 0;
