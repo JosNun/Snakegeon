@@ -10,16 +10,20 @@
       #game {
         position: fixed;
         top: 0;
-        right: 0;
-        bottom: 0;
-        left: 0;
+        left: 50%;
+        width: 100vmin;
+        height: 100vmin;
+        background: skyblue;
+
+        transform: translate(-50%);
       }
     </style>
 
   <body>
-    Welcome to Snakegeon! It be very coool!
+    <!-- Welcome to Snakegeon! It be very coool! -->
     <canvas id="game"></canvas>
 
     <script src="./game.js"></script>
+    <script src="./world.js"></script>
   </body>
 </html>
