@@ -1,7 +1,6 @@
-import './world';
-import './player';
+import world from "./world";
 
-const canvas = document.getElementById('game');
+const canvas = document.getElementById("game");
 
 const size =
   window.innerWidth < window.innerHeight
@@ -11,12 +10,12 @@ const size =
 canvas.width = size;
 canvas.height = size;
 
-const ctx = canvas.getContext('2d');
+const ctx = canvas.getContext("2d");
 
 let x = 0;
 let y = 0;
 
-const w = new world();
+const w = new world(ctx);
 
 function update() {
   ctx.clearRect(0, 0, size, size);

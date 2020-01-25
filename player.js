@@ -1,5 +1,6 @@
 class player {
-  constructor(x, y, l) {
+  constructor(ctx, x, y, l) {
+    this.ctx = ctx;
     this.x = x;
     this.y = y;
 
@@ -12,7 +13,9 @@ class player {
 
   display() {
     for (let i in this.body) {
-      ctx.fillRect(this.body[i].x * 20, this.body[i].y * 20, 18, 18);
+      this.ctx.fillRect(this.body[i].x * 20, this.body[i].y * 20, 18, 18);
     }
   }
 }
+
+export default player;
