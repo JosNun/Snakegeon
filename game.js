@@ -1,3 +1,5 @@
+import './world';
+
 const canvas = document.getElementById('game');
 
 const size =
