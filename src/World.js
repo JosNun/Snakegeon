@@ -1,5 +1,6 @@
 import WorldData from './WorldData';
 import Tile from './Tile';
+import Player from './Player';
 
 class World {
   constructor(canvas) {
@@ -18,6 +19,8 @@ class World {
     this.ctx = canvas.getContext('2d');
 
     this.level = this.loadLevel();
+
+    this.player = new Player(3, 3);
   }
 
   loadLevel() {
@@ -38,12 +41,16 @@ class World {
     this.level.forEach(level => {
       level.render(this.ctx);
     });
+
+    this.player.render(this.ctx);
   }
 
   update() {
     // do something...
 
     this.render(this.ctx);
+
+    this.player.update();
   }
 }
 
