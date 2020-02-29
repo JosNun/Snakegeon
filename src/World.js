@@ -14,24 +14,52 @@ class World {
 
     this.size = size;
 
-    WorldData.setWorldSize(size);
-
     this.ctx = canvas.getContext("2d");
 
     this.level = this.loadLevel();
 
-    this.player = new Player(3, 3, this.level, this.update);
+    // this.player = new Player(3, 3, this.level, this.update);
   }
 
   loadLevel() {
-    const level = [];
+    const levelData = [
+      "w . . . . . . . . . . . . . . .",
+      ". . . . . . . . . . . . . . . .",
+      ". . p . . . . . . . . . . . . .",
+      ". . . . . . . . . . . . . . . .",
+      ". . . . . . . . . . . . . . . .",
+      ". . . . . . . . w w w w w w w .",
+      ". . . . . . . . w . . . . . w .",
+      ". . . w w w w w w . . . . . w .",
+      ". . . . . . . . . . . . . . w .",
+      ". . . . . . . . . . . . . . w .",
+      ". . . . . . . . w w w w w w w .",
+      ". . . . . . . . . . . . . . . ."
+    ];
 
-    for (let y = 0; y < 16; y++) {
-      level.push([]);
-      for (let x = 0; x < 16; x++) {
-        level[y][x] = new Tile(x, y);
-      }
-    }
+    const level = levelData.map((row, y) => {
+      const parsedRow = row.replace(/\s/g, "");
+      const rowData = parsedRow.split("");
+      const rowEntities = rowData.map((tileType, x) => {
+        switch (tileType) {
+          case "w":
+            return new Tile(x, y, { color: "#000", isSolid: true });
+          case "p":
+            this.player = new Player(
+              levelData.length,
+              x,
+              y,
+              this.level,
+              this.update
+            );
+            return new Tile(x, y, { color: "#fa0" });
+          default:
+            return new Tile(x, y, { color: "#fa0" });
+        }
+      });
+
+      return rowEntities;
+    });
 
     return level;
   }

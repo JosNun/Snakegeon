@@ -1,16 +1,15 @@
-import WorldData from "./WorldData";
-
 class Tile {
-  constructor(x, y, level, { color } = {}) {
+  constructor(size, x, y, { color, isSolid } = {}) {
+    this.size = size;
     this.x = x;
     this.y = y;
-    this.level = level;
     this.color = color || "#fa0";
+    this.isSolid = isSolid || false;
   }
 
   render(ctx) {
     const { x, y } = this;
-    const size = WorldData.blockSize;
+    const size = this.size;
 
     ctx.fillStyle = this.color;
     ctx.fillRect(x * size, y * size, size, size);

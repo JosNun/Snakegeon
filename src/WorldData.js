@@ -1,9 +1,10 @@
 class WorldData {
-  setWorldSize(size, { scale } = {}) {
-    this.worldSize = size;
+  constructor(canvasSize, mapLayout) {
+    this.layout = mapLayout;
+    this.size = mapLayout.length;
 
-    this.blockSize = Math.floor(size / (scale || 16));
+    this.blockSize = Math.floor(canvasSize / this.size);
   }
 }
 
-export default new WorldData();
+export default WorldData;

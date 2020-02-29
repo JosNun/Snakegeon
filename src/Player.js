@@ -1,9 +1,9 @@
-import Tile from "./Tile";
+import Entity from "./Entity";
 import { keys } from "./keys";
 
-class Player extends Tile {
-  constructor(x, y, level, onUpdate) {
-    super(x, y, level, { color: "#00ff00" });
+class Player extends Entity {
+  constructor(size, x, y, level, onUpdate) {
+    super(size, x, y, level, { color: "#00ff00" });
 
     this.updateWorld = onUpdate;
     this.canMove = -1;
