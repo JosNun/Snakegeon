@@ -2,9 +2,10 @@ import Tile from "./Tile";
 import { keys } from "./keys";
 
 class Player extends Tile {
-  constructor(x, y, level) {
+  constructor(x, y, level, onUpdate) {
     super(x, y, level, { color: "#00ff00" });
 
+    this.updateWorld = onUpdate;
     this.canMove = -1;
   }
 
@@ -20,16 +21,17 @@ class Player extends Tile {
       newY = this.y;
     }
 
-    if (this.canMove < 0) {
+    if (this.canMove < 0 && (newX !== this.x || newY !== this.y)) {
       this.x = newX;
       this.y = newY;
       this.canMove = 10;
+      this.updateWorld();
     } else {
       this.canMove--;
     }
   }
 
-  control(level) {
+  control() {
     if (keys["w"]) {
       this.move(0, -1);
     } else if (keys["s"]) {
@@ -43,7 +45,7 @@ class Player extends Tile {
     }
   }
 
-  update() {
+  tick() {
     this.control();
   }
 }

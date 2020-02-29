@@ -1,11 +1,11 @@
-import World from './World';
+import World from "./World";
 
-const canvas = document.getElementById('game');
+const canvas = document.getElementById("game");
 
 const w = new World(canvas);
 
 function update() {
-  w.update();
+  w.tick();
   window.requestAnimationFrame(update);
 }
 

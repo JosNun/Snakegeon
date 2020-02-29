@@ -20,7 +20,7 @@ class World {
 
     this.level = this.loadLevel();
 
-    this.player = new Player(3, 3, this.level);
+    this.player = new Player(3, 3, this.level, this.update);
   }
 
   loadLevel() {
@@ -34,6 +34,11 @@ class World {
     }
 
     return level;
+  }
+
+  tick() {
+    this.player.tick();
+    this.render();
   }
 
   render() {
@@ -50,10 +55,7 @@ class World {
 
   update() {
     // do something...
-
-    this.render(this.ctx);
-
-    this.player.update();
+    console.log("updated :D");
   }
 }
 
