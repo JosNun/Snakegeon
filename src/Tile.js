@@ -1,10 +1,11 @@
-import WorldData from './WorldData';
+import WorldData from "./WorldData";
 
 class Tile {
-  constructor(x, y, { color } = {}) {
+  constructor(x, y, level, { color } = {}) {
     this.x = x;
     this.y = y;
-    this.color = color || '#fa0';
+    this.level = level;
+    this.color = color || "#fa0";
   }
 
   render(ctx) {

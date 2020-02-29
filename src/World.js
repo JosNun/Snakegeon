@@ -1,6 +1,6 @@
-import WorldData from './WorldData';
-import Tile from './Tile';
-import Player from './Player';
+import WorldData from "./WorldData";
+import Tile from "./Tile";
+import Player from "./Player";
 
 class World {
   constructor(canvas) {
@@ -9,26 +9,27 @@ class World {
         ? window.innerWidth
         : window.innerHeight;
 
-    canvas.width = size;
-    canvas.height = size;
+    canvas.width = Math.round(size / 16) * 16;
+    canvas.height = Math.round(size / 16) * 16;
 
     this.size = size;
 
     WorldData.setWorldSize(size);
 
-    this.ctx = canvas.getContext('2d');
+    this.ctx = canvas.getContext("2d");
 
     this.level = this.loadLevel();
 
-    this.player = new Player(3, 3);
+    this.player = new Player(3, 3, this.level);
   }
 
   loadLevel() {
     const level = [];
 
-    for (let x = 0; x < 16; x++) {
-      for (let y = 0; y < 16; y++) {
-        level.push(new Tile(x, y));
+    for (let y = 0; y < 16; y++) {
+      level.push([]);
+      for (let x = 0; x < 16; x++) {
+        level[y][x] = new Tile(x, y);
       }
     }
 
@@ -38,8 +39,10 @@ class World {
   render() {
     this.ctx.clearRect(0, 0, this.size, this.size);
 
-    this.level.forEach(level => {
-      level.render(this.ctx);
+    this.level.forEach(column => {
+      column.forEach(row => {
+        row.render(this.ctx);
+      });
     });
 
     this.player.render(this.ctx);

@@ -1,46 +1,50 @@
-import Tile from './Tile';
-import { keys } from './keys';
+import Tile from "./Tile";
+import { keys } from "./keys";
 
 class Player extends Tile {
-  constructor(x, y) {
-    super(x, y, { color: '#00ff00' });
+  constructor(x, y, level) {
+    super(x, y, level, { color: "#00ff00" });
 
-    this.canMove = true;
-    this.pressed = {};
+    this.canMove = -1;
   }
 
-  move() {
-    if (keys['w']) {
-      if (!this.pressed['w']) {
-        this.pressed['w'] = true;
+  move(x, y) {
+    let newX = this.x + x;
+    let newY = this.y + y;
 
-        this.y--;
-      }
-    } else if (keys['s']) {
-      if (!this.pressed['s']) {
-        this.pressed['s'] = true;
+    if (newX < 0 || newX > this.level[0].length - 1) {
+      newX = this.x;
+    }
 
-        this.y++;
-      }
-    } else if (keys['a']) {
-      if (!this.pressed['a']) {
-        this.pressed['a'] = true;
+    if (newY < 0 || newY > this.level.length - 1) {
+      newY = this.y;
+    }
 
-        this.x--;
-      }
-    } else if (keys['d']) {
-      if (!this.pressed['d']) {
-        this.pressed['d'] = true;
-
-        this.x++;
-      }
+    if (this.canMove < 0) {
+      this.x = newX;
+      this.y = newY;
+      this.canMove = 10;
     } else {
-      this.pressed = {};
+      this.canMove--;
+    }
+  }
+
+  control(level) {
+    if (keys["w"]) {
+      this.move(0, -1);
+    } else if (keys["s"]) {
+      this.move(0, 1);
+    } else if (keys["a"]) {
+      this.move(-1, 0);
+    } else if (keys["d"]) {
+      this.move(1, 0);
+    } else {
+      this.canMove = -1;
     }
   }
 
   update() {
-    this.move();
+    this.control();
   }
 }
 
