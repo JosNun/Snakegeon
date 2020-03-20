@@ -10,10 +10,24 @@ class Player extends Entity {
     this.canMove = -1;
   }
 
+  getEntityAt(x, y) {
+    const entity = this.level[y][x];
+
+    return entity;
+  }
+
   move(x, y) {
+    this.canMove--;
+
+    //prevent player from speeding
+    if (this.canMove >= 0) {
+      return;
+    }
+
     let newX = this.x + x;
     let newY = this.y + y;
 
+    // keep within world bounds
     if (newX < 0 || newX > this.level[0].length - 1) {
       newX = this.x;
     }
@@ -22,14 +36,19 @@ class Player extends Entity {
       newY = this.y;
     }
 
-    if (this.canMove < 0 && (newX !== this.x || newY !== this.y)) {
-      this.x = newX;
-      this.y = newY;
-      this.canMove = 10;
-      this.updateWorld();
-    } else {
-      this.canMove--;
+    //prevent from waling into stuffs
+
+    const targetEntity = this.getEntityAt(newX, newY);
+    if (targetEntity.isSolid) {
+      newX = this.x;
+      newY = this.y;
     }
+
+    //change position
+    this.x = newX;
+    this.y = newY;
+    this.canMove = 10;
+    this.updateWorld();
   }
 
   control() {
