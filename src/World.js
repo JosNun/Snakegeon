@@ -34,8 +34,17 @@ class World {
       ". . . . . . . . . . . . . . w .",
       ". . . . . . . . . . . . . . w .",
       ". . . . . . . . w w w w w w w .",
+      ". . . . . . . . . . . . . . . .",
+      ". . . . . . . . . . . . . . . .",
+      ". . . . . . . . . . . . . . . .",
+      ". . . . . . . . . . . . . . . .",
       ". . . . . . . . . . . . . . . ."
     ];
+
+    const playerPos = {
+      x: 0,
+      y: 0
+    };
 
     const level = levelData.map((row, y) => {
       const parsedRow = row.replace(/\s/g, "");
@@ -45,13 +54,8 @@ class World {
           case "w":
             return new Tile(x, y, { color: "#000", isSolid: true });
           case "p":
-            this.player = new Player(
-              levelData.length,
-              x,
-              y,
-              this.level,
-              this.update
-            );
+            playerPos.x = x;
+            playerPos.y = y;
             return new Tile(x, y, { color: "#fa0" });
           default:
             return new Tile(x, y, { color: "#fa0" });
@@ -60,6 +64,14 @@ class World {
 
       return rowEntities;
     });
+
+    this.player = new Player(
+      levelData.length,
+      playerPos.x,
+      playerPos.y,
+      level,
+      this.update
+    );
 
     return level;
   }

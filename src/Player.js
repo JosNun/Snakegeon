@@ -5,6 +5,7 @@ class Player extends Entity {
   constructor(size, x, y, level, onUpdate) {
     super(size, x, y, level, { color: "#00ff00" });
 
+    this.level = level;
     this.updateWorld = onUpdate;
     this.canMove = -1;
   }
