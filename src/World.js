@@ -17,8 +17,6 @@ class World {
     this.ctx = canvas.getContext("2d");
 
     this.level = this.loadLevel();
-
-    // this.player = new Player(3, 3, this.level, this.update);
   }
 
   loadLevel() {
@@ -46,19 +44,24 @@ class World {
       y: 0
     };
 
+    const tileSize = Math.floor(this.size / levelData.length);
+
     const level = levelData.map((row, y) => {
       const parsedRow = row.replace(/\s/g, "");
       const rowData = parsedRow.split("");
       const rowEntities = rowData.map((tileType, x) => {
         switch (tileType) {
           case "w":
-            return new Tile(x, y, { color: "#000", isSolid: true });
+            return new Tile(tileSize, x, y, {
+              color: "#000",
+              isSolid: true
+            });
           case "p":
             playerPos.x = x;
             playerPos.y = y;
-            return new Tile(x, y, { color: "#fa0" });
+            return new Tile(tileSize, x, y, { color: "#fa0" });
           default:
-            return new Tile(x, y, { color: "#fa0" });
+            return new Tile(tileSize, x, y, { color: "#fa0" });
         }
       });
 
@@ -66,7 +69,7 @@ class World {
     });
 
     this.player = new Player(
-      levelData.length,
+      tileSize,
       playerPos.x,
       playerPos.y,
       level,
