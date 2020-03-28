@@ -1,17 +1,17 @@
 import Entity from "./Entity";
-import { keys } from "./keys";
+import { keys, lastKeys } from "./keys";
 
 class Player extends Entity {
-  constructor(x, y, level, onUpdate) {
-    super(x, y, level, { color: "#00ff00" });
+  constructor(x, y, world) {
+    super(x, y, world.level, { color: "#00ff00" });
 
-    this.level = level;
-    this.updateWorld = onUpdate;
+    this.world = world;
     this.canMove = -1;
+    this.canTp = false;
   }
 
   getEntityAt(x, y) {
-    const entity = this.level[y][x];
+    const entity = this.world.level[y][x];
 
     return entity;
   }
@@ -24,15 +24,17 @@ class Player extends Entity {
       return;
     }
 
+    const level = this.world.level;
+
     let newX = this.x + x;
     let newY = this.y + y;
 
     // keep within world bounds
-    if (newX < 0 || newX > this.level[0].length - 1) {
+    if (newX < 0 || newX > level[0].length - 1) {
       newX = this.x;
     }
 
-    if (newY < 0 || newY > this.level.length - 1) {
+    if (newY < 0 || newY > level.length - 1) {
       newY = this.y;
     }
 
@@ -44,14 +46,16 @@ class Player extends Entity {
     }
 
     if (targetEntity.isPortal()) {
-      console.log("You dun won!");
+      console.log("You dun progressed a tiny bit! Beat this nest level! Ha!");
+      this.world.loadNextLevel();
     }
 
     //change position
     this.x = newX;
     this.y = newY;
     this.canMove = 10;
-    this.updateWorld();
+    this.world.update();
+    this.canTp = true;
   }
 
   control() {
@@ -65,6 +69,10 @@ class Player extends Entity {
       this.move(1, 0);
     } else {
       this.canMove = -1;
+    }
+
+    if (keys[" "] && this.canTp) {
+      this.world.loadNextLevel();
     }
   }
 

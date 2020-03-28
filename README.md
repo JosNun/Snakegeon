@@ -4,9 +4,9 @@
 
 [x] Prevent player from going out of world
 [x] Make player movement repeatable
-[ ] Walls
-[ ] Portal
-[ ] World Generation
+[x] Walls
+[x] Portal
+[x] World Generation
 [ ] Enemy unit (simple)
 [ ] Death
 

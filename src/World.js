@@ -1,8 +1,10 @@
 import Tile from "./Tile";
 import Player from "./Player";
+import levels from "./data/levels.json";
 
 class World {
   constructor(canvas) {
+    this.canvas = canvas;
     this.size =
       window.innerWidth < window.innerHeight
         ? window.innerWidth
@@ -10,32 +12,24 @@ class World {
 
     this.ctx = canvas.getContext("2d");
 
-    this.level = this.loadLevel(canvas);
+    this.currentLevel = 0;
+    this.level = this.loadLevel(levels[this.currentLevel]);
   }
 
-  loadLevel(canvas) {
-    const levelData = [
-      "w . . . . . . . . . . . . . . .",
-      ". . . . . . . . . . . . . . . .",
-      ". . p . . . . . . . . . . . . .",
-      ". . . . . . . . . . . . . . . .",
-      ". . . . . . . . . . . . . . . .",
-      ". . . . . . . . . . . . . . . .",
-      ". . . . . . . . w w w w w w w .",
-      ". . . . . . . . w . . . . . w .",
-      ". . . w w w w w w . . O . . w .",
-      ". . . . . . . . . . . . . . w .",
-      ". . . . . . . . . . . . . . w .",
-      ". . . . . . . . w w w w w w w .",
-      ". . . . . . . . . . . . . . . .",
-      ". . . . . . . . . . . . . . . .",
-      ". . . . . . . . . . . . . . . .",
-      ". . . . . . . . . . . . . . . ."
-    ].map(row => row.replace(/\s/g, ""));
+  loadNextLevel() {
+    this.currentLevel = this.currentLevel + 1;
+    if (this.currentLevel > levels.length - 1) {
+      this.currentLevel = 0;
+    }
+    this.level = this.loadLevel(levels[this.currentLevel]);
+  }
+
+  loadLevel(lev) {
+    const levelData = lev.map(row => row.replace(/\s/g, ""));
 
     const tileSize = Math.floor(this.size / levelData.length);
-    canvas.width = tileSize * levelData.length;
-    canvas.height = tileSize * levelData[0].length;
+    this.canvas.width = tileSize * levelData.length;
+    this.canvas.height = tileSize * levelData[0].length;
 
     const playerPos = {
       x: 0,
@@ -69,7 +63,7 @@ class World {
       return rowEntities;
     });
 
-    this.player = new Player(playerPos.x, playerPos.y, level, this.update);
+    this.player = new Player(playerPos.x, playerPos.y, this);
 
     return level;
   }
