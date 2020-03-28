@@ -1,75 +1,73 @@
-import WorldData from "./WorldData";
 import Tile from "./Tile";
 import Player from "./Player";
+import TileFactory from "./TileFactory";
 
 class World {
   constructor(canvas) {
-    const size =
+    this.size =
       window.innerWidth < window.innerHeight
         ? window.innerWidth
         : window.innerHeight;
 
-    canvas.width = Math.round(size / 16) * 16;
-    canvas.height = Math.round(size / 16) * 16;
-
-    this.size = size;
-
     this.ctx = canvas.getContext("2d");
 
-    this.level = this.loadLevel();
+    this.level = this.loadLevel(canvas);
   }
 
-  loadLevel() {
+  loadLevel(canvas) {
     const levelData = [
       "w . . . . . . . . . . . . . . .",
       ". . . . . . . . . . . . . . . .",
       ". . p . . . . . . . . . . . . .",
       ". . . . . . . . . . . . . . . .",
       ". . . . . . . . . . . . . . . .",
+      ". . . . . . . . . . . . . . . .",
       ". . . . . . . . w w w w w w w .",
       ". . . . . . . . w . . . . . w .",
-      ". . . w w w w w w . . . . . w .",
+      ". . . w w w w w w . . O . . w .",
       ". . . . . . . . . . . . . . w .",
       ". . . . . . . . . . . . . . w .",
       ". . . . . . . . w w w w w w w .",
-      ". . . . . . . . . . . . . . . .",
       ". . . . . . . . . . . . . . . .",
       ". . . . . . . . . . . . . . . .",
       ". . . . . . . . . . . . . . . .",
       ". . . . . . . . . . . . . . . ."
-    ];
+    ].map(row => row.replace(/\s/g, ""));
+
+    const tileSize = Math.floor(this.size / levelData.length);
+    canvas.width = tileSize * levelData.length;
+    canvas.height = tileSize * levelData[0].length;
 
     const playerPos = {
       x: 0,
       y: 0
     };
 
-    const tileSize = Math.floor(this.size / levelData.length);
+    TileFactory.setTileSize(tileSize);
 
     const level = levelData.map((row, y) => {
-      const parsedRow = row.replace(/\s/g, "");
-      const rowData = parsedRow.split("");
+      const rowData = Array.from(row);
       const rowEntities = rowData.map((tileType, x) => {
-        switch (tileType) {
+        switch (tileType.toLowerCase()) {
           case "w":
-            return new Tile(tileSize, x, y, {
+            return TileFactory.createTile(Tile, x, y, {
               color: "#000",
               isSolid: true
             });
           case "p":
             playerPos.x = x;
             playerPos.y = y;
-            return new Tile(tileSize, x, y, { color: "#fa0" });
+            return TileFactory.createTile(Tile, x, y, { color: "#fa0" });
           default:
-            return new Tile(tileSize, x, y, { color: "#fa0" });
+            return TileFactory.createTile(Tile, x, y, { color: "#fa0" });
         }
       });
 
       return rowEntities;
     });
 
-    this.player = new Player(
-      tileSize,
+    this.player = TileFactory.createTile(
+      Player,
       playerPos.x,
       playerPos.y,
       level,
