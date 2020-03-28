@@ -36,12 +36,15 @@ class Player extends Entity {
       newY = this.y;
     }
 
-    //prevent from waling into stuffs
-
+    //prevent from walking into stuff
     const targetEntity = this.getEntityAt(newX, newY);
-    if (targetEntity.isSolid) {
+    if (targetEntity.isSolid()) {
       newX = this.x;
       newY = this.y;
+    }
+
+    if (targetEntity.isPortal()) {
+      console.log("You dun won!");
     }
 
     //change position

@@ -1,15 +1,22 @@
 class Tile {
-  constructor(x, y, { color, isSolid } = {}) {
+  constructor(x, y, meta) {
     this.x = x;
     this.y = y;
-    this.color = color || "#fa0";
-    this.isSolid = isSolid || false;
+    this.meta = meta;
+  }
+
+  isSolid() {
+    return this.meta.isSolid ?? false;
+  }
+
+  isPortal() {
+    return this.meta.isPortal ?? false;
   }
 
   render(ctx, size) {
     const { x, y } = this;
 
-    ctx.fillStyle = this.color;
+    ctx.fillStyle = this.meta.color;
     ctx.fillRect(x * size, y * size, size, size);
   }
 

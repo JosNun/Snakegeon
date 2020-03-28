@@ -52,6 +52,11 @@ class World {
               color: "#000",
               isSolid: true
             });
+          case "o":
+            return new Tile(x, y, {
+              color: "#a000c0",
+              isPortal: true
+            });
           case "p":
             playerPos.x = x;
             playerPos.y = y;
