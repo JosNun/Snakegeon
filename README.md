@@ -1,5 +1,11 @@
 # Snakegeon
 
+# Development
+
+- clone the repo
+- `npm install`
+- `npm start`
+
 ## todo
 
 [ ] Fix not moving when no entities
@@ -15,7 +21,7 @@
 [ ] Rework level storage
 [ ] Rework proper movement
 [ ] Convert to typescript
-[ ] Comment our code
+[ ] Make comments/better code
 
 ```json
 [
