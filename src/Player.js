@@ -3,7 +3,7 @@ import { keys } from "./keys";
 
 class Player extends Entity {
   constructor(x, y, world) {
-    super(x, y, world.level, { color: "#00ff00" });
+    super(x, y, { color: "#00ff00" });
 
     this.world = world;
     this.canMove = -1;

@@ -9,6 +9,18 @@
 [x] World Generation
 [x] The Death Square (Spine/Mike)
 [ ] Enemy unit (simple)
-[ ] Death
+[x] Death
+[ ] Rework level storage
+[] Convert to typescript
+
+```json
+[
+  {
+    "x": 5,
+    "y": 3,
+    "type": "PATROLLER"
+  }
+]
+```
 
 [ ] Level editor

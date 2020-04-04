@@ -35,10 +35,7 @@ class World {
     this.canvas.width = tileSize * levelData.length;
     this.canvas.height = tileSize * levelData[0].length;
 
-    const playerPos = {
-      x: 0,
-      y: 0,
-    };
+    let entities = [];
 
     const level = levelData.map((row, y) => {
       const parsedRow = row.replace(/\s/g, "");
@@ -61,8 +58,8 @@ class World {
               isPortal: true,
             });
           case "p":
-            playerPos.x = x;
-            playerPos.y = y;
+            this.player = new Player(x, y, this);
+            entities.push(this.player);
             return new Tile(x, y, { color: "#fa0" });
           default:
             return new Tile(x, y, { color: "#fa0" });
@@ -72,7 +69,9 @@ class World {
       return rowEntities;
     });
 
-    this.player = new Player(playerPos.x, playerPos.y, this);
+    for (let i in entities) {
+      entities[i].setLevel(level);
+    }
 
     return level;
   }
