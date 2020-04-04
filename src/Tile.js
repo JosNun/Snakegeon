@@ -1,5 +1,5 @@
 class Tile {
-  constructor(x, y, meta) {
+  constructor(x, y, meta = {}) {
     this.x = x;
     this.y = y;
     this.meta = meta;
@@ -20,12 +20,8 @@ class Tile {
   render(ctx, size) {
     const { x, y } = this;
 
-    ctx.fillStyle = this.meta.color;
+    ctx.fillStyle = this.meta.color ?? "#646464";
     ctx.fillRect(x * size, y * size, size, size);
-  }
-
-  update(ctx) {
-    this.render(ctx);
   }
 }
 

@@ -2,18 +2,10 @@ import Entity from "./Entity";
 import { keys } from "./keys";
 
 class Player extends Entity {
-  constructor(x, y, world) {
+  constructor(x, y) {
     super(x, y, { color: "#00ff00" });
-
-    this.world = world;
     this.canMove = -1;
     this.canTp = false;
-  }
-
-  getEntityAt(x, y) {
-    const entity = this.world.level[y][x];
-
-    return entity;
   }
 
   move(x, y) {
@@ -39,27 +31,42 @@ class Player extends Entity {
     }
 
     //prevent from walking into stuff
-    const targetEntity = this.getEntityAt(newX, newY);
-    if (targetEntity.isSolid()) {
+    const targetTile = this.getTileAt(newX, newY);
+    if (targetTile.isSolid()) {
       newX = this.x;
       newY = this.y;
     }
 
-    if (targetEntity.isDeadly()) {
+    if (targetTile.isDeadly()) {
       this.world.setLevel(0);
       return;
     }
 
-    if (targetEntity.isPortal()) {
+    if (targetTile.isPortal()) {
       console.log("You dun progressed a tiny bit! Beat this nest level! Ha!");
       this.world.setLevel();
+    }
+
+    const targetEntity = this.getEntityAt(newX, newY, false);
+
+    if (targetEntity && targetEntity.isDeadly()) {
+      this.world.setLevel(0);
+      return;
     }
 
     //change position
     this.x = newX;
     this.y = newY;
-    this.canMove = 10;
     this.world.update();
+
+    const targetEntity2 = this.getEntityAt(this.x, this.y, false);
+
+    if (targetEntity2 && targetEntity2.isDeadly()) {
+      this.world.setLevel(0);
+      return;
+    }
+
+    this.canMove = 10;
     this.canTp = true;
   }
 

@@ -1,6 +1,7 @@
 import Tile from "./Tile";
 import Player from "./Player";
 import levels from "./data/levels.json";
+import Patroller from "./Patroller";
 import { reset as resetKeys } from "./keys";
 
 class World {
@@ -14,6 +15,7 @@ class World {
     this.ctx = canvas.getContext("2d");
 
     this.currentLevel = 0;
+    this.entities = undefined;
     this.level = this.loadLevel(levels[this.currentLevel]);
   }
 
@@ -35,7 +37,7 @@ class World {
     this.canvas.width = tileSize * levelData.length;
     this.canvas.height = tileSize * levelData[0].length;
 
-    let entities = [];
+    this.entities = [];
 
     const level = levelData.map((row, y) => {
       const parsedRow = row.replace(/\s/g, "");
@@ -57,21 +59,37 @@ class World {
               color: "#a000c0",
               isPortal: true,
             });
+          case "l":
+            this.entities.push(
+              new Patroller(x, y, {
+                direction: "x",
+                color: "#bad",
+              })
+            );
+            return new Tile(x, y);
+          case "u":
+            this.entities.push(
+              new Patroller(x, y, {
+                direction: "y",
+                color: "#bae",
+              })
+            );
+            return new Tile(x, y);
           case "p":
-            this.player = new Player(x, y, this);
-            entities.push(this.player);
-            return new Tile(x, y, { color: "#fa0" });
+            this.player = new Player(x, y);
+            this.entities.push(this.player);
+            return new Tile(x, y);
           default:
-            return new Tile(x, y, { color: "#fa0" });
+            return new Tile(x, y);
         }
       });
 
       return rowEntities;
     });
 
-    for (let i in entities) {
-      entities[i].setLevel(level);
-    }
+    this.entities.forEach((entity) => {
+      entity.setWorld(this);
+    });
 
     return level;
   }
@@ -91,11 +109,19 @@ class World {
       });
     });
 
-    this.player.render(this.ctx, tileSize);
+    this.entities.forEach((entity) => {
+      entity.render(this.ctx, tileSize);
+    });
   }
 
   update() {
     // do something...
+    this.entities.forEach((entity) => {
+      if (entity.update) {
+        entity.update();
+      }
+    });
+
     console.log("updated :D");
   }
 }
