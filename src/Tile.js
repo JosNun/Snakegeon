@@ -13,6 +13,10 @@ class Tile {
     return this.meta.isPortal ?? false;
   }
 
+  isDeadly() {
+    return this.meta.isDeadly ?? false;
+  }
+
   render(ctx, size) {
     const { x, y } = this;
 

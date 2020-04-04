@@ -1,5 +1,5 @@
 import Entity from "./Entity";
-import { keys, lastKeys } from "./keys";
+import { keys } from "./keys";
 
 class Player extends Entity {
   constructor(x, y, world) {
@@ -45,9 +45,14 @@ class Player extends Entity {
       newY = this.y;
     }
 
+    if (targetEntity.isDeadly()) {
+      this.world.setLevel(0);
+      return;
+    }
+
     if (targetEntity.isPortal()) {
       console.log("You dun progressed a tiny bit! Beat this nest level! Ha!");
-      this.world.loadNextLevel();
+      this.world.setLevel();
     }
 
     //change position
@@ -72,7 +77,7 @@ class Player extends Entity {
     }
 
     if (keys[" "] && this.canTp) {
-      this.world.loadNextLevel();
+      this.world.setLevel(true);
     }
   }
 

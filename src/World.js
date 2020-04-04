@@ -1,6 +1,7 @@
 import Tile from "./Tile";
 import Player from "./Player";
 import levels from "./data/levels.json";
+import { reset as resetKeys } from "./keys";
 
 class World {
   constructor(canvas) {
@@ -16,16 +17,19 @@ class World {
     this.level = this.loadLevel(levels[this.currentLevel]);
   }
 
-  loadNextLevel() {
-    this.currentLevel = this.currentLevel + 1;
-    if (this.currentLevel > levels.length - 1) {
+  setLevel(count) {
+    resetKeys();
+    this.currentLevel = this.currentLevel + (count ?? 1);
+
+    if (this.currentLevel > levels.length - 1 || this.currentLevel.length < 0) {
       this.currentLevel = 0;
     }
+
     this.level = this.loadLevel(levels[this.currentLevel]);
   }
 
   loadLevel(lev) {
-    const levelData = lev.map(row => row.replace(/\s/g, ""));
+    const levelData = lev.map((row) => row.replace(/\s/g, ""));
 
     const tileSize = Math.floor(this.size / levelData.length);
     this.canvas.width = tileSize * levelData.length;
@@ -33,7 +37,7 @@ class World {
 
     const playerPos = {
       x: 0,
-      y: 0
+      y: 0,
     };
 
     const level = levelData.map((row, y) => {
@@ -44,12 +48,17 @@ class World {
           case "w":
             return new Tile(x, y, {
               color: "#000",
-              isSolid: true
+              isSolid: true,
+            });
+          case "m":
+            return new Tile(x, y, {
+              color: "#ff3310",
+              isDeadly: true,
             });
           case "o":
             return new Tile(x, y, {
               color: "#a000c0",
-              isPortal: true
+              isPortal: true,
             });
           case "p":
             playerPos.x = x;
@@ -77,8 +86,8 @@ class World {
     this.ctx.clearRect(0, 0, this.size, this.size);
     const tileSize = Math.floor(this.size / this.level.length);
 
-    this.level.forEach(column => {
-      column.forEach(row => {
+    this.level.forEach((column) => {
+      column.forEach((row) => {
         row.render(this.ctx, tileSize);
       });
     });

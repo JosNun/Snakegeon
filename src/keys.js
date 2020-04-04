@@ -1,9 +1,13 @@
-export const keys = {};
+export let keys = {};
 
-window.addEventListener('keydown', e => {
+export function reset() {
+  keys = {};
+}
+
+window.addEventListener("keydown", (e) => {
   keys[e.key] = true;
 });
 
-window.addEventListener('keyup', e => {
+window.addEventListener("keyup", (e) => {
   keys[e.key] = false;
 });

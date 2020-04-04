@@ -7,6 +7,7 @@
 [x] Walls
 [x] Portal
 [x] World Generation
+[x] The Death Square (Spine/Mike)
 [ ] Enemy unit (simple)
 [ ] Death
 
