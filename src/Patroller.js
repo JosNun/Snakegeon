@@ -22,7 +22,8 @@ class Patroller extends Entity {
     }
 
     const targetTile = this.getTileAt(newX, newY);
-    if (!targetTile || targetTile.isSolid()) {
+    const targetEntity = this.getEntityAt(newX, newY, false);
+    if (!targetTile || targetTile.isSolid() || targetEntity) {
       newX = this.x;
       newY = this.y;
 

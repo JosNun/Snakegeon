@@ -4,17 +4,17 @@ import { keys } from "./keys";
 class Player extends Entity {
   constructor(x, y) {
     super(x, y, { color: "#00ff00" });
-    this.canMove = -1;
+    this.canMove = true;
     this.canTp = false;
   }
 
   move(x, y) {
-    this.canMove--;
-
     //prevent player from speeding
-    if (this.canMove >= 0) {
-      return;
-    }
+    // if (!this.canMove) {
+    //   return;
+    // }
+
+    this.canMove = false;
 
     const level = this.world.level;
 
@@ -57,20 +57,28 @@ class Player extends Entity {
     //change position
     this.x = newX;
     this.y = newY;
-    this.world.update();
 
-    const targetEntity2 = this.getEntityAt(this.x, this.y, false);
-
-    if (targetEntity2 && targetEntity2.isDeadly()) {
-      this.world.setLevel(0);
-      return;
-    }
-
-    this.canMove = 10;
     this.canTp = true;
+
+    this.world.update().then(() => {
+      //you updated yet? If yes keep going. If no, wait.
+
+      const targetEntity2 = this.getEntityAt(this.x, this.y, false);
+
+      if (targetEntity2 && targetEntity2.isDeadly()) {
+        this.world.setLevel(0);
+        return;
+      }
+
+      this.canMove = true;
+    });
   }
 
   control() {
+    if (!this.canMove) {
+      return;
+    }
+
     if (keys["w"]) {
       this.move(0, -1);
     } else if (keys["s"]) {
@@ -79,8 +87,6 @@ class Player extends Entity {
       this.move(-1, 0);
     } else if (keys["d"]) {
       this.move(1, 0);
-    } else {
-      this.canMove = -1;
     }
 
     if (keys[" "] && this.canTp) {

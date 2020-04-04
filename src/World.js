@@ -71,7 +71,7 @@ class World {
             this.entities.push(
               new Patroller(x, y, {
                 direction: "y",
-                color: "#bae",
+                color: "#bed",
               })
             );
             return new Tile(x, y);
@@ -116,13 +116,39 @@ class World {
 
   update() {
     // do something...
-    this.entities.forEach((entity) => {
-      if (entity.update) {
-        entity.update();
-      }
-    });
+    return new Promise((resolve, reject) => {
+      this.entities
+        .filter((ent) => ent.update)
+        .sort((a, b) => {
+          if (a.y < b.y) {
+            return -1;
+          }
 
-    console.log("updated :D");
+          if (b.y < a.y) {
+            return 1;
+          }
+
+          if (a.x < b.x) {
+            return -1;
+          }
+
+          if (b.x < a.x) {
+            return 1;
+          }
+
+          return 0;
+        })
+        .forEach((entity, i, arr) => {
+          setTimeout(() => {
+            entity.update();
+            if (i === arr.length - 1) {
+              resolve();
+            }
+          }, i * 140);
+        });
+
+      console.log("updated :D");
+    });
   }
 }
 
