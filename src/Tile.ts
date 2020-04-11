@@ -1,5 +1,11 @@
+import { TileMeta } from "./types";
+
 class Tile {
-  constructor(x, y, meta = {}) {
+  x: number;
+  y: number;
+  meta: TileMeta;
+
+  constructor(x: number, y: number, meta: Partial<TileMeta> = {}) {
     this.x = x;
     this.y = y;
     this.meta = meta;
@@ -17,7 +23,7 @@ class Tile {
     return this.meta.isDeadly ?? false;
   }
 
-  render(ctx, size) {
+  render(ctx: CanvasRenderingContext2D, size: number) {
     const { x, y } = this;
 
     ctx.fillStyle = this.meta.color ?? "#646464";

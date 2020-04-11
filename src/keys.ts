@@ -1,4 +1,4 @@
-export let keys = {};
+export let keys: Record<string, boolean> = {};
 
 export function reset() {
   keys = {};

@@ -1,6 +1,6 @@
 import World from "./World";
 
-const canvas = document.getElementById("game");
+const canvas = document.getElementById("game") as HTMLCanvasElement;
 
 const w = new World(canvas);
 

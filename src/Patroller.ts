@@ -1,17 +1,32 @@
 import Entity from "./Entity";
+import { PatrollerMeta } from "./types";
+
+const defaultMeta = {
+  direction: "x",
+  heading: 1,
+};
 
 class Patroller extends Entity {
-  constructor(x, y, meta = {}) {
+  direction: string;
+  heading: number;
+
+  constructor(x: number, y: number, meta: Partial<PatrollerMeta>) {
     super(x, y, meta);
-    this.direction = meta.direction;
-    this.heading = meta.heading ?? 1;
+
+    const mergedMeta = {
+      ...defaultMeta,
+      ...meta,
+    };
+
+    this.direction = mergedMeta.direction;
+    this.heading = mergedMeta.heading;
   }
 
   isDeadly() {
     return true;
   }
 
-  update() {
+  update = () => {
     let newX = this.x;
     let newY = this.y;
 
@@ -35,7 +50,7 @@ class Patroller extends Entity {
 
     this.x = newX;
     this.y = newY;
-  }
+  };
 }
 
 export default Patroller;
