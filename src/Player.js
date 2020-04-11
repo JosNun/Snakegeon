@@ -55,23 +55,26 @@ class Player extends Entity {
     }
 
     //change position
-    this.x = newX;
-    this.y = newY;
+    if (this.x !== newX || this.y !== newY) {
+      this.x = newX;
+      this.y = newY;
 
-    this.canTp = true;
+      this.canTp = true;
 
-    this.world.update().then(() => {
-      //you updated yet? If yes keep going. If no, wait.
+      this.world.update().then(() => {
+        //you updated yet? If yes keep going. If no, wait.
 
-      const targetEntity2 = this.getEntityAt(this.x, this.y, false);
+        const targetEntity2 = this.getEntityAt(this.x, this.y, false);
 
-      if (targetEntity2 && targetEntity2.isDeadly()) {
-        this.world.setLevel(0);
-        return;
-      }
-
+        if (targetEntity2 && targetEntity2.isDeadly()) {
+          this.world.setLevel(0);
+          return;
+        }
+        this.canMove = true;
+      });
+    } else {
       this.canMove = true;
-    });
+    }
   }
 
   control() {
