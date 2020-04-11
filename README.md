@@ -18,7 +18,7 @@
 - [x] The Death Square (Spine/Mike)
 - [x] Enemy unit (simple)
 - [x] Death
-- [ ] Convert to typescript
+- [x] Convert to typescript
 - [ ] Rework level storage
 - [ ] Rework proper movement (last key pressed has priority)
 - [ ] Make comments/better code
