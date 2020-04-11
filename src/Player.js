@@ -9,11 +9,6 @@ class Player extends Entity {
   }
 
   move(x, y) {
-    //prevent player from speeding
-    // if (!this.canMove) {
-    //   return;
-    // }
-
     this.canMove = false;
 
     const level = this.world.level;
