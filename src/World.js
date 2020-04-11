@@ -115,10 +115,14 @@ class World {
   }
 
   update() {
-    // do something...
     return new Promise((resolve, reject) => {
-      this.entities
-        .filter((ent) => ent.update)
+      const entities = this.entities.filter((ent) => ent.update);
+
+      if (entities.length === 0) {
+        setTimeout(resolve, 150);
+      }
+
+      entities
         .sort((a, b) => {
           if (a.y < b.y) {
             return -1;
@@ -144,7 +148,7 @@ class World {
             if (i === arr.length - 1) {
               resolve();
             }
-          }, i * 140);
+          }, i * 50);
         });
 
       console.log("updated :D");
