@@ -119,8 +119,10 @@ class World {
       const entities = this.entities.filter((ent) => ent.update);
 
       if (entities.length === 0) {
-        setTimeout(resolve, 150);
+        setTimeout(resolve, 200);
       }
+
+      const entityTime = 200 / entities.length;
 
       entities
         .sort((a, b) => {
@@ -148,7 +150,7 @@ class World {
             if (i === arr.length - 1) {
               resolve();
             }
-          }, i * 50);
+          }, i * entityTime);
         });
 
       console.log("updated :D");

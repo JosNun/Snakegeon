@@ -8,7 +8,7 @@
 
 ## todo
 
-- [ ] Fix not moving when no entities
+- [x] Fix not moving when no entities
 
 - [x] Prevent player from going out of world
 - [x] Make player movement repeatable
@@ -18,9 +18,9 @@
 - [x] The Death Square (Spine/Mike)
 - [x] Enemy unit (simple)
 - [x] Death
-- [ ] Rework level storage
-- [ ] Rework proper movement
 - [ ] Convert to typescript
+- [ ] Rework level storage
+- [ ] Rework proper movement (last key pressed has priority)
 - [ ] Make comments/better code
 
 ```json
