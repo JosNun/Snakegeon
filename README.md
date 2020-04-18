@@ -19,7 +19,8 @@
 - [x] Enemy unit (simple)
 - [x] Death
 - [x] Convert to typescript
-- [ ] Rework level storage
+- [x] Rework level storage
+  - [ ] Level editor
 - [ ] Rework proper movement (last key pressed has priority)
 - [ ] Make comments/better code
 
@@ -32,5 +33,3 @@
   }
 ]
 ```
-
-- [ ] Level editor

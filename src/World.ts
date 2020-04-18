@@ -1,18 +1,21 @@
 import Tile from "./Tile";
 import Player from "./Player";
-import levels from "./data/levels.json";
+const levels: LevelData[] = require("./data/levels.json");
 import Patroller from "./Patroller";
 import { reset as resetKeys } from "./keys";
 import Entity from "./Entity";
+import { LevelData, EntityType } from "./types";
+import { isEntity } from "./utils";
 
 class World {
   canvas: HTMLCanvasElement;
   size: number;
   ctx: CanvasRenderingContext2D;
   currentLevel: number;
-  entities?: Entity[];
-  level: (Tile | Entity | Player)[][];
+  currentLevelData: LevelData;
+
   player?: Player;
+  tiles: (Tile | Entity | Player)[];
 
   constructor(canvas: HTMLCanvasElement) {
     this.canvas = canvas;
@@ -24,8 +27,8 @@ class World {
     this.ctx = canvas.getContext("2d") as CanvasRenderingContext2D;
 
     this.currentLevel = 0;
-    this.entities = undefined;
-    this.level = this.loadLevel(levels[this.currentLevel]);
+    this.currentLevelData = levels[this.currentLevel];
+    this.tiles = this.loadLevel(this.currentLevelData);
   }
 
   setLevel(count?: number) {
@@ -35,72 +38,61 @@ class World {
     if (this.currentLevel > levels.length - 1 || this.currentLevel < 0) {
       this.currentLevel = 0;
     }
-
-    this.level = this.loadLevel(levels[this.currentLevel]);
+    this.currentLevelData = levels[this.currentLevel];
+    this.tiles = this.loadLevel(this.currentLevelData);
   }
 
-  loadLevel(lev: string[]) {
-    const levelData = lev.map((row) => row.replace(/\s/g, ""));
+  loadLevel(lev: LevelData) {
+    const tileSize = Math.floor(this.size / lev.size);
+    this.canvas.width = tileSize * lev.size;
+    this.canvas.height = tileSize * lev.size;
 
-    const tileSize = Math.floor(this.size / levelData.length);
-    this.canvas.width = tileSize * levelData.length;
-    this.canvas.height = tileSize * levelData[0].length;
+    const tiles = lev.tiles.map((tile) => {
+      const { type, x, y } = tile;
 
-    this.entities = [];
-
-    const level = levelData.map((row, y) => {
-      const parsedRow = row.replace(/\s/g, "");
-      const rowData = parsedRow.split("");
-      const rowEntities = rowData.map((tileType, x) => {
-        switch (tileType.toLowerCase()) {
-          case "w":
-            return new Tile(x, y, {
-              color: "#000",
-              isSolid: true,
-            });
-          case "m":
-            return new Tile(x, y, {
-              color: "#ff3310",
-              isDeadly: true,
-            });
-          case "o":
-            return new Tile(x, y, {
-              color: "#a000c0",
-              isPortal: true,
-            });
-          case "l":
-            this.entities?.push(
-              new Patroller(x, y, {
-                direction: "x",
-                color: "#bad",
-              })
-            );
-            return new Tile(x, y);
-          case "u":
-            this.entities?.push(
-              new Patroller(x, y, {
-                direction: "y",
-                color: "#bed",
-              })
-            );
-            return new Tile(x, y);
-          case "p":
-            this.player = new Player(x, y);
-            this.entities?.push(this.player);
-            return new Tile(x, y);
-          default:
-            return new Tile(x, y);
-        }
-      });
-
-      return rowEntities;
+      switch (type) {
+        case EntityType.Wall:
+          return new Tile(x, y, {
+            color: "#000",
+            isSolid: true,
+          });
+        case EntityType.Magma:
+          return new Tile(x, y, {
+            color: "#ff3310",
+            isDeadly: true,
+          });
+        case EntityType.Portal:
+          return new Tile(x, y, {
+            color: "#a000c0",
+            isPortal: true,
+          });
+        case EntityType.PatrollerLeft:
+          return new Patroller(x, y, {
+            direction: "x",
+            color: "#bad",
+          });
+        case EntityType.PatrollerUp:
+          return new Patroller(x, y, {
+            direction: "y",
+            color: "#bed",
+          });
+        case EntityType.Player:
+          this.player = new Player(x, y);
+          return this.player;
+        default:
+          return ((x: never): never => {
+            throw new Error(`Unknown type: ${x}`);
+          })(type);
+      }
     });
 
-    this.entities.forEach((entity) => {
-      entity.setWorld(this);
+    tiles.forEach((tile) => {
+      if (tile instanceof Entity) {
+        tile.setWorld(this);
+      }
     });
 
-    return level;
+    return tiles;
   }
 
   tick() {
@@ -109,23 +101,20 @@ class World {
   }
 
   render() {
-    this.ctx?.clearRect(0, 0, this.size, this.size);
-    const tileSize = Math.floor(this.size / this.level.length);
+    this.ctx.fillStyle = "#f7ca72";
+    this.ctx?.fillRect(0, 0, this.size, this.size);
+    const levelSize = this.currentLevelData.size;
+    const tileSize = Math.floor(this.size / levelSize);
 
-    this.level.forEach((column) => {
-      column.forEach((row) => {
-        row.render(this.ctx, tileSize);
-      });
-    });
-
-    this.entities?.forEach((entity) => {
-      entity.render(this.ctx, tileSize);
+    this.tiles.forEach((tile) => {
+      tile.render(this.ctx, tileSize);
     });
   }
 
   update() {
     return new Promise((resolve, reject) => {
-      const entities = this.entities?.filter((ent) => ent.update) ?? [];
+      const entities =
+        this.tiles?.filter(isEntity).filter((ent) => ent.update) ?? [];
 
       if (entities.length === 0) {
         setTimeout(resolve, 200);

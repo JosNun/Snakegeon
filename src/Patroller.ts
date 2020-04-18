@@ -1,5 +1,6 @@
 import Entity from "./Entity";
 import { PatrollerMeta } from "./types";
+import Player from "./Player";
 
 const defaultMeta = {
   direction: "x",
@@ -27,6 +28,10 @@ class Patroller extends Entity {
   }
 
   update = () => {
+    if (!this.world) {
+      return;
+    }
+
     let newX = this.x;
     let newY = this.y;
 
@@ -36,15 +41,28 @@ class Patroller extends Entity {
       newY += this.heading;
     }
 
-    const targetTile = this.getTileAt(newX, newY);
-    const targetEntity = this.getEntityAt(newX, newY, false);
-    if (!targetTile || targetTile.isSolid() || targetEntity) {
-      this.heading = this.heading * -1;
+    const levelSize = this.world?.currentLevelData.size;
 
-      if (this.direction === "x") {
-        newX = this.x + this.heading;
-      } else {
-        newY = this.y + this.heading;
+    // keep within world bounds
+    if (newX < 0 || newX > levelSize - 1) {
+      newX = this.x;
+    }
+
+    if (newY < 0 || newY > levelSize - 1) {
+      newY = this.y;
+    }
+
+    const targetTile = this.getTileAt(newX, newY);
+
+    if (targetTile?.isSolid()) {
+      if (!(targetTile instanceof Player)) {
+        this.heading = this.heading * -1;
+
+        if (this.direction === "x") {
+          newX = this.x + this.heading;
+        } else {
+          newY = this.y + this.heading;
+        }
       }
     }
 

@@ -19,17 +19,17 @@ class Player extends Entity {
 
     this.canMove = false;
 
-    const level = this.world.level;
+    const levelSize = this.world.currentLevelData.size;
 
     let newX = this.x + x;
     let newY = this.y + y;
 
     // keep within world bounds
-    if (newX < 0 || newX > level[0].length - 1) {
+    if (newX < 0 || newX > levelSize - 1) {
       newX = this.x;
     }
 
-    if (newY < 0 || newY > level.length - 1) {
+    if (newY < 0 || newY > levelSize - 1) {
       newY = this.y;
     }
 
@@ -50,7 +50,7 @@ class Player extends Entity {
       this.world.setLevel();
     }
 
-    const targetEntity = this.getEntityAt(newX, newY, false);
+    const targetEntity = this.getTileAt(newX, newY, false);
 
     if (targetEntity && targetEntity.isDeadly()) {
       this.world.setLevel(0);
@@ -67,7 +67,7 @@ class Player extends Entity {
       this.world.update().then(() => {
         //you updated yet? If yes keep going. If no, wait.
 
-        const targetEntity2 = this.getEntityAt(this.x, this.y, false);
+        const targetEntity2 = this.getTileAt(this.x, this.y, false);
 
         if (targetEntity2 && targetEntity2.isDeadly()) {
           (this.world as World).setLevel(0);

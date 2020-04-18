@@ -17,19 +17,16 @@ class Entity extends Tile {
     this.world = world;
   }
 
-  getTileAt(x: number, y: number) {
-    const tile = this.world?.level[y]?.[x];
-
-    return tile;
-  }
-
-  getEntityAt(x: number, y: number, includePlayer = true) {
-    const entity = this.world?.entities?.find((entity) => {
-      if (!includePlayer && entity instanceof Player) {
+  getTileAt(
+    x: number,
+    y: number,
+    includePlayer = true
+  ): World["tiles"][0] | undefined {
+    const entity = this.world?.tiles.find((tile) => {
+      if (!includePlayer && tile instanceof Player) {
         return false;
       }
-
-      return entity.x === x && entity.y === y;
+      return tile.x === x && tile.y === y;
     });
 
     return entity;
