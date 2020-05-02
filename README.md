@@ -21,15 +21,6 @@
 - [x] Convert to typescript
 - [x] Rework level storage
   - [ ] Level editor
-- [ ] Rework proper movement (last key pressed has priority)
+- [x] Rework proper movement (last key pressed has priority)
+  - Current implementation feels good for now
 - [ ] Make comments/better code
-
-```json
-[
-  {
-    "x": 5,
-    "y": 3,
-    "type": "PATROLLER"
-  }
-]
-```
