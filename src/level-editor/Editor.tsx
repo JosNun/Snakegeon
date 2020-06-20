@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 import { ToolPanel } from "./ToolPanel";
 import { LevelMap } from "./LevelMap";
@@ -32,7 +32,7 @@ export const Editor: React.FC = () => {
         selectedEntityType={selectedEntityType}
         setSelectedEntityType={setSelectedEntityType}
       />
-      <LevelMap />
+      <LevelMap levelData={worldData} />
       <OptionPanel />
     </div>
   );

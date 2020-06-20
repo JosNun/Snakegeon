@@ -58,20 +58,20 @@ body {
 
 .editor-area {
   background: rgb(117, 117, 117);
-  display: grid;
-  grid-template-columns: 1fr;
-  grid-template-rows: 1fr;
-  padding: 16px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .world-map {
+  max-height: 100vh;
+  max-width: 100vh;
+  line-height: 0;
   flex: 1;
-  display: grid;
-  grid-template-columns: repeat(var(--world-size), 1fr);
-  grid-template-rows: repeat(var(--world-size), 1fr);
-  gap: 2px;
 }
 
 .world-tile {
   border: 2px solid black;
+  box-sizing: border-box;
+  display: inline-block;
 }
