@@ -24,6 +24,23 @@ export const Editor: React.FC = () => {
     });
   };
 
+  const setEntity = (x: number, y: number) => {
+    const newTiles = worldData.tiles.filter(
+      (tile) => !(tile.x === x && tile.y === y)
+    );
+
+    newTiles.push({
+      x,
+      y,
+      type: selectedEntityType,
+    });
+
+    setWorldData({
+      ...worldData,
+      tiles: newTiles,
+    });
+  };
+
   return (
     <div className="wrapper">
       <ToolPanel
@@ -32,7 +49,7 @@ export const Editor: React.FC = () => {
         selectedEntityType={selectedEntityType}
         setSelectedEntityType={setSelectedEntityType}
       />
-      <LevelMap levelData={worldData} />
+      <LevelMap levelData={worldData} onEntityChange={setEntity} />
       <OptionPanel />
     </div>
   );

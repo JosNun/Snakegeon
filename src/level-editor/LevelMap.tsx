@@ -5,9 +5,13 @@ import { debounce } from "lodash-es";
 
 interface LevelMapProps {
   levelData: LevelData;
+  onEntityChange: (x: number, y: number) => void;
 }
 
-export const LevelMap: React.FC<LevelMapProps> = ({ levelData }) => {
+export const LevelMap: React.FC<LevelMapProps> = ({
+  levelData,
+  onEntityChange,
+}) => {
   const [updateCount, setForceUpdate] = useState(0);
   const editorEl = useRef<HTMLDivElement | null>(null);
   const [tileSize, setTileSize] = useState<number>();
@@ -17,17 +21,40 @@ export const LevelMap: React.FC<LevelMapProps> = ({ levelData }) => {
 
     for (let i = 0; i < levelData.size; i++) {
       for (let j = 0; j < levelData.size; j++) {
+        const entity = levelData?.tiles.find(
+          (tile) => tile.x === j && tile.y === i
+        );
+
         tiles.push(
           <div
-            key={`x${i}-y${j}`}
+            key={`x${j}-y${i}`}
+            onClick={() => {
+              onEntityChange(j, i);
+            }}
             className={cx(
               "world-tile",
               css({
+                float: "left",
+                display: "inline-flex",
+                justifyContent: "center",
+                alignItems: "center",
                 width: tileSize,
                 height: tileSize,
+                overflow: "hidden",
+                transitionDuration: "0.5s",
+                "&:hover": {
+                  background: `rgba(${Math.random() * 255}, ${
+                    Math.random() * 255
+                  }, ${Math.random() * 255}, 0.5)`,
+                  color: "white",
+                  overflow: "visible",
+                  transitionDuration: "0s",
+                },
               })
             )}
-          ></div>
+          >
+            {entity?.type}
+          </div>
         );
       }
     }
